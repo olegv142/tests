@@ -83,9 +83,9 @@ def test():
         p.send('#%d' % counter)
         if p.is_connected():
             led.on()
-        else:
+        elif not (counter % 16):
             led.toggle()
-        time.sleep_ms(1000)
+        time.sleep_ms(20)
         counter += 1
 
 if __name__ == "__main__":
