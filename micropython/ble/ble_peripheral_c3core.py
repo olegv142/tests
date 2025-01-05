@@ -80,7 +80,7 @@ def test():
     p.on_write(lambda v: print("rx: ", v))
     led = Pin(8, Pin.OUT)
     led_on = False
-    wdt = WDT(timeout=10000)
+    wdt = WDT(timeout=15000)
     counter = 0
     while True:
         p.send('#%d' % counter)
