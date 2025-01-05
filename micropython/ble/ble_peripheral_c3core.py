@@ -6,6 +6,7 @@ import ubinascii
 from ble_advertising import advertising_payload
 from micropython import const
 from machine import Pin
+from machine import WDT
 
 # https://github.com/micropython/micropython/blob/master/examples/bluetooth
 
@@ -78,14 +79,19 @@ def test():
     p = BLEPeripheral(ble)
     p.on_write(lambda v: print("rx: ", v))
     led = Pin(8, Pin.OUT)
+    led_on = False
+    wdt = WDT(timeout=10000)
     counter = 0
     while True:
         p.send('#%d' % counter)
         if p.is_connected():
             led.off()
-        else:
-            led(counter % 2)
-        time.sleep_ms(1000)
+            led_on = False
+        elif not (counter % 4):
+            led_on = not led_on
+            led(led_on)
+        wdt.feed()
+        time.sleep_ms(100)
         counter += 1
 
 if __name__ == "__main__":
